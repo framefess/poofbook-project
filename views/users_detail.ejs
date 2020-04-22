@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>หนัง-ลือ-สู !!!</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+</head>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+  }
+
+  th {
+    white-space: nowrap;
+  }
+
+  tbody td {
+    height: 51px;
+  }
+
+  .smallCell {
+    width: 1px;
+    white-space: nowrap;
+  }
+</style>
+
+<body>
+  <%- include('header') -%>
+  <div class="center" style="padding: 10px 0px;">
+    <div class="con900" style="text-align: left;">
+
+      <div class="w3-card-4">
+
+        <header class="w3-container w3-light-grey">
+          <h1>ข้อมูลสมาชิก</h1>
+        </header>
+
+        <div class="w3-container">
+          <div>
+            <div style="display:inline-block;min-width:100px;">
+              <p>ชื่อ-นามสกุล</p>
+            </div>
+            <div style="display:inline-block">
+              <p><%= data.first_name+" "+data.last_name %></p>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline-block;min-width:100px;">
+              <p>อีเมล</p>
+            </div>
+            <div style="display:inline-block">
+              <p><%= data.email %></p>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline-block;min-width:100px;">
+              <p>โทรศัพท์</p>
+            </div>
+            <div style="display:inline-block">
+              <p><%= data.tel_number %></p>
+            </div>
+          </div>
+        </div>
+
+        <footer class="w3-container w3-light-grey">
+          <h5>รายการเช่าหนังสือ</h5>
+          <input type="text" id="myInput" onkeyup="myFunction()" placeholder="ค้าหา...">
+        </footer>
+
+      </div>
+      <table class="w3-table-all w3-hoverable">
+        <thead>
+          <tr>
+            <th style="text-align: center;" class="smallCell">ลำดับ</th>
+            <th style="text-align: center;">อีเมล</th>
+            <th style="text-align: center;">โทรศัพท์</th>
+            <th class="smallCell">สถานะเช่า</th>
+            <th style="text-align: center;" class="smallCell">การจัดการ</td>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="myTable">
+          <% for(var i=0; i<data.length; i++) {%>
+          <tr>
+            <td class="w3-center"><%= i+1 %></td>
+            <td><%= data[i].email %></td>
+            <td class="w3-center"><%= data[i].tel_number %> </td>
+            <td class="w3-center"></td>
+            
+          </tr>
+          <% } %>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <%- include('footer') -%>
+
+  <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+  <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+    integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

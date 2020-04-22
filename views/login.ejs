@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>หนัง-ลือ-สู !!!</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  </head>
+  <style>
+    input {
+      margin: 5px 0px;
+    }
+  </style>
+  <body>
+    <%- include('header') -%>
+    <div style="margin: 0;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);">
+      <div class="center">
+        <h1>เข้าสู่ระบบ</h1>
+      </div>
+      <form class="w3-container con900" action="/login" method="POST">
+        <div style="width: 50%; margin: auto;">
+          <% if(typeof login !== 'undefined') {%>
+          <div class="w3-panel w3-red">
+            <h3>การเข้าสู่ระบบล้มเหลว</h3>
+            <p>อีเมลหรือรหัสผ่านผิด</p>
+          </div>
+          <% } %>
+          <label class="w3-text-green">อีเมล</label>
+          <input
+            type="Email"
+            name="email"
+            placeholder="Email"
+            required
+            class="w3-input w3-border"
+          />
+          <label class="w3-text-green">รหัสผ่าน</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            class="w3-input w3-border"
+            required
+            minlength="6"
+          />
+          <center>
+            <button
+              class="w3-btn w3-green"
+              type="submit"
+              style="margin: 10px 0px;"
+            >
+              Login
+            </button>
+          </center>
+        </div>
+      </form>
+    </div>
+    <%- include('footer') -%>
+    <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+  </body>
+</html>

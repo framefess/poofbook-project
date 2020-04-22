@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>หนัง-ลือ-สู !!!</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  </head>
+  <style></style>
+  <body>
+    <%- include('header') -%>
+    <div class="center" style="min-height: 100%;">
+      <% if(typeof register != 'undefined') {%>
+      <div class="w3-panel w3-green" style="margin: 0px;">
+        <h3>สมัครสมาชิกเรียบร้อย</h3>
+      </div>
+      <% } %> <% if(typeof login != 'undefined') {%>
+      <div class="w3-panel w3-green" style="margin: 0px;">
+        <h3>เข้าสู่ระบบเรียบร้อย</h3>
+      </div>
+      <% } %>
+      <h1>ยินดีต้อนรับสู่ร้าน หนัง-ลือ-สู !!! </h1>
+    </div>
+
+    <%- include('footer') -%>
+
+    <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+  </body>
+</html>

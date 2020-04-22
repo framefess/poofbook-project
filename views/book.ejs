@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>หนัง-ลือ-สู !!!</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+  </head>
+  <style></style>
+  <body>
+    <%- include('header') -%>
+    <% data = (typeof data != 'undefined' ? data: '')%>
+    <div>
+      <div class="center" style="min-height: 100%;">
+        <h1><%= (data ==''?'เพิ่มหนังสือ':'แก้ไข') %></h1>
+      </div>
+      <form
+        class="w3-container con900"
+        action="<%= (data !=''?'/dashboard/book?id='+data._id:'/dashboard/book') %>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+
+        <div style="width: 50%; margin: auto auto;">
+          <% if(typeof book !== 'undefined') {%>
+          <div class="w3-panel w3-red">
+            <h3>เพิ่มหนังสือล้มเหลว</h3>
+            <p>มีชื่อหนังสืออยู่ในระบบอยู่แล้ว</p>
+          </div>
+          <% } %> <% if(typeof message !== 'undefined') {%>
+          <div class="w3-panel w3-red">
+            <h3>เพิ่มหนังสือล้มเหลว</h3>
+            <p><%= message%></p>
+          </div>
+          <% } %>
+
+
+          <label class="w3-text-green"><b>ชื่อหนังสือ</b></label>
+          <input class="w3-input w3-border" type="text" name="name" value="<%= (data !=''?data.name:'') %>" required />
+          <label class="w3-text-green"><b>หมวดหมู่</b></label>
+          <select class="w3-input w3-border" name="category" required>
+            <option value="" disabled <%= (data != ''?'':"selected") %> >โปรดเลือก</option>
+            <option value="วาย" <%= (data != ''?(data.category != 'วาย'?'':'selected'):'') %> > วาย</option>
+            <option value="ไทย" <%= (data != ''?(data.category != 'ไทย'?'':'selected'):'') %> >ไทย</option>
+            <option value="จีน" <%= (data != ''?(data.category != 'จีน'?'':'selected'):'') %> >จีน</option>
+            <option value="แปล" <%= (data != ''?(data.category != 'แปล'?'':'selected'):'') %> >แปล</option>
+            <option value="อื่น ๆ"<%= (data != ''?(data.category != 'อื่น ๆ'?'':'selected'):'') %>>อื่น ๆ</option>
+          </select>
+
+          <label class="w3-text-green"><b>ราคาปก</b></label>
+          <input
+            class="w3-input w3-border"
+            type="number"
+            name="price"
+            required
+            value="<%= (data !=''?data.price:'') %>"
+          />
+
+          <label class="w3-text-green"><b>จำนวนเล่ม</b></label>
+          <input
+            class="w3-input w3-border"
+            type="number"
+            name="quantity"
+            required
+            value="<%= (data !=''?data.quantity:'')%>"
+          />
+
+          <label class="w3-text-green"><b>รูป</b></label>
+          <input
+            class="w3-input w3-border"
+            type="file"
+            name="image"
+            id="image"
+          />
+          <div style="width: 100%; text-align: center;">
+            <img
+              id="preimg"
+              src="/images/<%= (data !=''?data.imgname:'') %>"
+              alt=""
+              style="width: 200px; object-fit: cover;"
+            />
+          </div>
+          <center>
+            <button
+              type="submit"
+              class="w3-btn w3-green"
+              style="margin: 10px 0px;"
+            >
+              บันทึกและสมัครสมาชิก
+            </button>
+          </center>
+        </div>
+      </form>
+    </div>
+    <%- include('footer') -%>
+    <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+    <script
+      src="https://code.jquery.com/jquery-3.5.0.js"
+      integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+            $("#preimg").attr("src", e.target.result);
+          };
+
+          reader.readAsDataURL(input.files[0]); // convert to base64 string
+        }
+      }
+
+      $("#image").change(function () {
+        $("#preimg").attr("src", "");
+        readURL(this);
+      });
+    </script>
+  </body>
+</html>

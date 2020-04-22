@@ -1,0 +1,43 @@
+<div class="w3-container w3-teal" style="position: relative;">
+  <div style="float: left;">
+    <a href="/"><h1>หนัง-ลือ-สู !!!</h1></a>
+  </div>
+  <div style="float: right; position: absolute; right: 20px; bottom: 5px;">
+    <% if(sess.email == undefined){ %>
+    <button class="w3-bar-item w3-button" onclick="location.href='/login'">
+      เข้าสู่ระบบ
+    </button>
+    <button class="w3-bar-item w3-button" onclick="location.href='/register'">
+      สมัครสมาชิก
+    </button>
+    <% }else{%>
+    <button class="w3-bar-item w3-button">
+      สวัสดี <%= sess.email %>
+    </button>
+    <% if(sess.user_stat == 'admin'){ %>
+
+    <button class="w3-bar-item w3-button" onclick="location.href='/dashboard'">
+      รายการหนังสือ
+    </button>
+    <button class="w3-bar-item w3-button">
+      รายการเช่า
+    </button>
+    <button class="w3-bar-item w3-button" onclick="location.href='/dashboard/users'">
+      รายการสมาชิก
+    </button>
+    <%}else{%>
+    <button class="w3-bar-item w3-button">
+      รถเข็น
+    </button>
+    <%}%>
+
+    <button class="w3-bar-item w3-button" onclick="location.href='/logout'">
+      ออกจากระบบ
+    </button>
+    <%} %>
+
+    <!-- <button class="w3-bar-item w3-button" onclick="location.href='/contact'">
+      ติดต่อเรา
+    </button> -->
+  </div>
+</div>
