@@ -5,14 +5,25 @@ var url = "mongodb://localhost:27017/";
 /* GET home page. */
 router.get('/', function (req, res, next) {
   console.log(req.session)
-  console.log(res.locals.email)
-  if (req.query.register != undefined) {
-    res.render('index', { register: "true" });
-  } else if (req.query.login != undefined) {
-    res.render('index', { login: "true" });
-  } else {
-    res.render('index');
-  }
+  // console.log(res.locals.sess.email)
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    const dbo = db.db("poofbook");
+    dbo.collection("books").find({}).toArray(function (err, result) {
+      if (err) throw err;
+      // console.log(result);
+      const data = result;
+      if (req.query.register != undefined) {
+        res.render('index', { register: "true", data });
+      } else if (req.query.login != undefined) {
+        res.render('index', { login: "true", data });
+      } else {
+        res.render('index', { data });
+      }
+      db.close();
+    });
+  });
+ 
 
 });
 
@@ -26,8 +37,8 @@ router.get('/register', function (req, res, next) {
 });
 
 router.post('/register/add', function (req, res, next) {
-const data = req.body;
-data.user_stat = 'user';
+  const data = req.body;
+  data.user_stat = 'user';
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     var dbo = db.db("poofbook");
@@ -70,8 +81,10 @@ router.post('/login', function (req, res, next) {
         db.close();
         res.redirect('/login?login=false');
       } else {
+        req.session.userid = result._id 
         req.session.email = result.email
         req.session.user_stat = result.user_stat
+        req.session.cart = [];
         // req.session.remember = req.body.remember
         db.close();
         res.redirect('/?login=true');
@@ -81,7 +94,7 @@ router.post('/login', function (req, res, next) {
 });
 
 router.get('/logout', function (req, res, next) {
-  req.session.destroy(function(err) {
+  req.session.destroy(function (err) {
     // ลบตัวแปร session ทั้งหมด 
     console.log("logout")
   })

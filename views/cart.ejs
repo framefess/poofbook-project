@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>หนัง-ลือ-สู !!!</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+</head>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  tbody td {
+    height: 51px;
+  }
+
+  .smallCell {
+    width: 1px;
+    white-space: nowrap;
+  }
+</style>
+
+<body>
+  <%- include('header') -%>
+  <div class="center" style="padding: 10px 0px;">
+    <div class="con900" style="text-align: left;">
+      <header class="w3-container w3-light-grey">
+        <h1>ตะกร้าสินค้า</h1>
+      </header>
+      <table class="w3-table w3-border w3-card-4 ">
+        <thead>
+          <tr class="w3-border">
+            <th style="text-align: center;" class="smallCell">ลำดับ</th>
+            <th style="text-align: center;">รายการ</th>
+            <th style="text-align: center;width: 5%;">รูป</th>
+            <th class="smallCell">ราคาปก</th>
+            <th class="smallCell">ราคาเช่า (20%)</th>
+            <th class="smallCell">จำนวน</th>
+            <th class="smallCell"></th>
+          </tr>
+        </thead>
+        <tbody id="myTable">
+          <% if(data.length == 0){%>
+          <tr>
+            <td colspan="7" class="w3-center">ไม่มีข้อมูลในตะกร้า</td>
+          </tr>
+          <%}else{%>
+          <% 
+          var totalprice = 0;
+          var totalrental = 0;
+          var totalquantity = 0;
+          for(var i=0; i<data.length; i++) {%>
+          <tr>
+            <td class="w3-center"><%= i+1 %></td>
+            <td style="padding-left: 20px;"><%= data[i].name %></td>
+            <td><img src="/images/<%= data[i].imgname %>" alt="" style="max-height:100%; max-width:100%"></td>
+            <td class="w3-right-align"><%= parseFloat(data[i].price).toFixed(2) %></td>
+            <td class="w3-right-align"><%= parseFloat((data[i].price) * 0.2 ).toFixed(2) %></td>
+            <td class="w3-right-align">1</td>
+            <td nowrap>
+              <button class="w3-button w3-red w3-small"
+                onclick="location.href='/users/cart/delete/<%= data[i]._id %>'">ลบ</button>
+            </td>
+          </tr>
+          <% 
+          totalprice = parseFloat((data[i].price))+parseFloat(totalprice) ;
+          totalrental = parseFloat((data[i].price)* 0.2)+parseFloat(totalrental);
+          totalquantity = parseInt(1)+parseInt(totalquantity);
+          } 
+          %>
+          <%}%>
+          
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="w3-right-align">รวม</td>
+            <td class="w3-right-align"><%= (parseFloat(totalprice).toFixed(2) == 'NaN'?'':parseFloat(totalprice).toFixed(2)) %>
+          </td>
+          <td class="w3-right-align">
+            <%= (parseFloat(totalrental).toFixed(2) == 'NaN'?'':parseFloat(totalrental).toFixed(2) ) %></td>
+          <td class="w3-right-align"><%=  totalquantity %></td>
+          </tr>
+          </tfoot>
+      </table>
+
+      <div style="float: right; margin: 10px;">
+        <button class="w3-btn w3-blue" onclick="location.href='/users/cart/clear'">ล้างตะกร้า</button>
+        <% if(data.length > 0){%>
+        <button class="w3-btn w3-green" onclick="location.href='/users/order'">เช่าหนังสือ</button>
+        <%}%>
+      </div>
+
+    </div>
+  </div>
+
+  <%- include('footer') -%>
+
+        <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+        <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+          integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
+</body>
+
+</html>

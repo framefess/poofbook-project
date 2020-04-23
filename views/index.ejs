@@ -1,28 +1,49 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>หนัง-ลือ-สู !!!</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
-  </head>
-  <style></style>
-  <body>
-    <%- include('header') -%>
-    <div class="center" style="min-height: 100%;">
-      <% if(typeof register != 'undefined') {%>
-      <div class="w3-panel w3-green" style="margin: 0px;">
-        <h3>สมัครสมาชิกเรียบร้อย</h3>
-      </div>
-      <% } %> <% if(typeof login != 'undefined') {%>
-      <div class="w3-panel w3-green" style="margin: 0px;">
-        <h3>เข้าสู่ระบบเรียบร้อย</h3>
-      </div>
-      <% } %>
-      <h1>ยินดีต้อนรับสู่ร้าน หนัง-ลือ-สู !!! </h1>
+
+<head>
+  <title>หนัง-ลือ-สู !!!</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+</head>
+<style>
+
+</style>
+
+<body>
+  <%- include('header') -%>
+  <div class="center" style="min-height: 100%;">
+    <% if(typeof register != 'undefined') {%>
+    <div class="w3-panel w3-green" style="margin: 0px;">
+      <h3>สมัครสมาชิกเรียบร้อย</h3>
     </div>
+    <% } %> <% if(typeof login != 'undefined') {%>
+    <div class="w3-panel w3-green" style="margin: 0px;">
+      <h3>เข้าสู่ระบบเรียบร้อย</h3>
+    </div>
+    <% } %>
+    <h1>ยินดีต้อนรับสู่ร้าน หนัง-ลือ-สู !!! </h1>
+    <% for(var i=0; i<data.length; i++) {%>
+    <div style="width: 150px;  display: inline-block;position: relative;">
+      <div class="w3-card-4">
+        <img src="/images/<%= data[i].imgname %>" style="width:100%;height: 200px;object-fit: fill;">
+        <div class="w3-container w3-center" style="padding: 0px;">
+          <p style="margin: 5px;"><%= data[i].name %></p>
+        </div>
+        <% if(sess.email != undefined && sess.user_stat == "user"){ %>
+        <div class="w3-container w3-center" style="padding: 0px;">
+          <p style="margin: 0px;"><button class="w3-btn w3-block w3-red"
+              onclick="location.href='/users/cart/add/<%= data[i]._id %>'">หยิบ</button></p>
+        </div>
+        <% } %>
+      </div>
+    </div>
+    <% } %>
+  </div>
 
-    <%- include('footer') -%>
+  <%- include('footer') -%>
 
-    <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
-  </body>
+  <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+</body>
+
 </html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>หนัง-ลือ-สู !!!</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+</head>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+  }
+
+  th {
+    white-space: nowrap;
+  }
+
+  tbody td {
+    height: 51px;
+  }
+
+  .smallCell {
+    width: 1px;
+    white-space: nowrap;
+  }
+</style>
+
+<body>
+  <%- include('header') -%>
+  <div class="center" style="padding: 10px 0px;">
+    <div class="con900" style="text-align: left;">
+      <input type="text" id="myInput" onkeyup="myFunction()" placeholder="ค้าหา...">
+      <table class="w3-table-all w3-hoverable">
+        <thead>
+          <tr>
+            <th style="text-align: center;" class="smallCell">ลำดับ</th>
+            <th style="text-align: center;" class="smallCell">รหัส</th>
+            <th style="text-align: center;" class="smallCell">วันที่รับ</th>
+            <th style="text-align: center;" class="smallCell">กำหนดส่งคืน</th>
+            <th style="text-align: center;" class="smallCell">ค่าเช่า</th>
+            <th style="text-align: center;" class="smallCell">การชำระเงิน</th>
+            <th style="text-align: center;" class="smallCell">สถานะ</th>
+            <th style="text-align: center;" class="smallCell">การจัดการ</td>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="myTable">
+          <% for(var i=0; i < data.length; i++) {%>
+          <tr>
+            <td class="w3-center"><%= i+1 %></td>
+            <td class="w3-center"><%= data[i].orderid %></td>
+            <td class="w3-center"><%= moment(data[i].date_receive).format('DD/MM/YYYY') %> </td>
+            <td class="w3-center"><%= moment(data[i].date_return).format('DD/MM/YYYY') %></td>
+            <td class="w3-center"><%= data[i].totalrental %></td>
+            <td nowrap class="w3-center"><%= data[i].payment_type %></td>
+            <td nowrap class="w3-center"><%= data[i].status %></td>
+            <td nowrap class="w3-right-align">
+              <!-- <button class="w3-button w3-tiny">Tiny</button>  -->
+              <button class="w3-button w3-blue w3-small"
+                onclick="location.href='/dashboard/orders/detail/<%= data[i].orderid %>'">รายละเอียด</button><% if((data[i].status == 'รอชำระเงิน' && data[i].payment_type == 'เงินสด') || (data[i].payment_type == 'โอนเงิน' && data[i].status == 'รอตรวจสอบ' )){ %>
+                <button
+                class="w3-button w3-green w3-small"
+                onclick="location.href='/dashboard/orders/submit/<%= data[i].orderid %>'">ยืนยันการชำระเงิน</button><button
+                class="w3-button w3-red w3-small"
+                onclick="location.href='/dashboard/orders/cancel/<%= data[i].orderid %>'">ยกเลิก</button><% }%>
+
+              <% if(data[i].status == 'รอคืนสินค้า'	
+){%><button class="w3-button w3-green w3-small"
+                onclick="location.href='/dashboard/orders/return/<%= data[i].orderid %>'">ยืนยันคืนสินค้า</button>
+              <%}%>
+
+
+
+            </td>
+          </tr>
+          <% } %>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <%- include('footer') -%>
+
+  <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+  <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+    integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

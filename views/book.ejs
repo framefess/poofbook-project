@@ -64,6 +64,15 @@
             value="<%= (data !=''?data.quantity:'')%>"
           />
 
+          <label class="w3-text-green" <%= (data !=''?'':'hidden')%> ><b>จำนวนที่เหลือ</b></label>
+          <input
+            class="w3-input w3-border"
+            type="<%= (data !=''?'number':'hidden')%>"
+            name="quantity_instock"
+            value="<%= (data !=''?data.quantity_instock:'')%>"
+            
+          />
+
           <label class="w3-text-green"><b>รูป</b></label>
           <input
             class="w3-input w3-border"

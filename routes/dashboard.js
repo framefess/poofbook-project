@@ -6,7 +6,7 @@ var path = require('path');
 var ObjectId = require('mongodb').ObjectID;
 var MongoClient = require('mongodb').MongoClient;
 var url = "mongodb://localhost:27017/poofbook";
-
+var moment = require('moment');
 //การอัพโหลดไฟล์
 let upload = multer({
   storage: multer.diskStorage({
@@ -96,7 +96,7 @@ router.post('/book', (req, res, next) => {
         const imgname = (req.files.length > 0 ? req.files[0].filename : "");
         const imgpath = (req.files.length > 0 ? req.files[0].destination : "");
         const pathunlink = (req.files.length > 0 ? req.files[0].path : "");
-        const { name, category, price, quantity } = req.body;
+        const { name, category, price, quantity, quantity_instock } = req.body;
         MongoClient.connect(url, function (err, db) {
           if (err) throw err;
           const dbo = db.db("poofbook");
@@ -126,9 +126,9 @@ router.post('/book', (req, res, next) => {
               console.log(myobj);
               let newvalues;
               if (imgname == '') {
-                newvalues = { $set: { name: name, category: category, price: price, quantity: quantity } };
+                newvalues = { $set: { name: name, category: category, price: price, quantity: quantity, quantity_instock: quantity_instock } };
               } else {
-                newvalues = { $set: { name: name, category: category, price: price, quantity: quantity, imgname: imgname } };
+                newvalues = { $set: { name: name, category: category, price: price, quantity: quantity, quantity_instock: quantity_instock, imgname: imgname } };
               }
 
               const myquery = { _id: ObjectId(id) };
@@ -189,7 +189,7 @@ router.post('/book', (req, res, next) => {
               }
 
             } else {
-              var myobj = { name: name, category: category, price: price, quantity: quantity, imgname: imgname };
+              var myobj = { name: name, category: category, price: price, quantity: quantity, quantity_instock: quantity, imgname: imgname };
               console.log(myobj);
               dbo.collection("books").insertOne(myobj, function (err) {
                 if (err) throw err;
@@ -269,7 +269,7 @@ router.get('/users/detail/:id', (req, res) => {
     dbo.collection("users").findOne(myquery, (err, result) => {
       if (err) throw err;
       console.log(result);
-      
+
       const data = result;
 
       res.render('users_detail', { data });
@@ -278,4 +278,90 @@ router.get('/users/detail/:id', (req, res) => {
   });
 });
 
+router.get('/orders', (req, res) => {
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    const dbo = db.db("poofbook");
+    dbo.collection("orders").find({ $or: [{ $and: [{ payment_type: 'เงินสด' }, { status: "รอชำระเงิน" }] }, { $and: [{ status: { $ne: "คืนเรียบร้อย" } }, { status: { $ne: "ยกเลิก" } }] }] }).sort({ _id: -1 }).toArray(function (err, result) {
+      if (err) throw err;
+      // console.log(result);
+      db.close();
+      const data = result;
+      res.render('order', { data, moment });
+    });
+  });
+});
+
+router.get('/orders/submit/:id', (req, res) => {
+  const { id } = req.params;
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    const dbo = db.db("poofbook");
+    let myquery = { orderid: id };
+    let newvalues = { $set: { status: "รอคืนสินค้า" } };
+    dbo.collection("orders").updateOne(myquery, newvalues, function (err, res2) {
+      if (err) throw err;
+      console.log("1 document updated");
+      db.close();
+      res.redirect('/dashboard/orders');
+    });
+  });
+});
+
+
+router.get('/orders/return/:id', (req, res) => {
+  const { id } = req.params;
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    const dbo = db.db("poofbook");
+    let myquery = { orderid: id };
+    let newvalues = { $set: { status: "คืนเรียบร้อย" } };
+    dbo.collection("orders").updateOne(myquery, newvalues, function (err, res2) {
+      if (err) throw err;
+      console.log("1 document updated");
+      db.close();
+      res.redirect('/dashboard/orders');
+    });
+  });
+});
+
+
+router.get('/orders/detail/:id', (req, res) => {
+  // const userid = req.session.userid ;
+  const { id } = req.params;
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    let dbo = db.db("poofbook");
+    dbo.collection("orders").findOne({ orderid: id }, async function (err, result) {
+      if (err) throw err;
+      const payment = await dbo.collection("payments").findOne({ orderid: id });
+      console.log(payment);
+      db.close();
+      const data = result;
+
+      res.render('user_order_detail', { data, payment });
+    });
+  });
+});
+
+router.get('/orders/cancel/:id', (req, res) => {
+  // const userid = req.session.userid ;
+  const { id } = req.params;
+
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    let dbo = db.db("poofbook");
+    let myquery = { orderid: id };
+    let newvalues = { $set: { status: "ยกเลิก" } };
+    console.log(myquery);
+    console.log(newvalues);
+    dbo.collection("orders").updateOne(myquery, newvalues, function (err, result) {
+      if (err) throw err;
+      console.log(result.result.nModified);
+      console.log("1 document updated");
+      db.close();
+      res.redirect('/dashboard/orders');
+    });
+  });
+});
 module.exports = router;

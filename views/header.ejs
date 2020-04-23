@@ -19,15 +19,18 @@
     <button class="w3-bar-item w3-button" onclick="location.href='/dashboard'">
       รายการหนังสือ
     </button>
-    <button class="w3-bar-item w3-button">
+    <button class="w3-bar-item w3-button"  onclick="location.href='/dashboard/orders'">
       รายการเช่า
     </button>
     <button class="w3-bar-item w3-button" onclick="location.href='/dashboard/users'">
       รายการสมาชิก
     </button>
     <%}else{%>
-    <button class="w3-bar-item w3-button">
-      รถเข็น
+    <button class="w3-bar-item w3-button" onclick="location.href='/users/cart'">
+      ตะกร้าสินค้า
+    </button>
+    <button class="w3-bar-item w3-button" onclick="location.href='/users/orderlist'">
+      รายการเช่า
     </button>
     <%}%>
 

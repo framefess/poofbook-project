@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>หนัง-ลือ-สู !!!</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+</head>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+  }
+
+  th {
+    white-space: nowrap;
+  }
+
+  tbody td {
+    height: 51px;
+  }
+
+  .smallCell {
+    width: 1px;
+    white-space: nowrap;
+  }
+</style>
+
+<body>
+  <%- include('header') -%>
+  <div class="center" style="padding: 10px 0px;">
+    <div class="con900" style="text-align: left;">
+
+      <div class="w3-card-4">
+
+        <header class="w3-container w3-light-grey">
+          <h1>รายละเอียดการเช่า</h1>
+        </header>
+
+        <div class="w3-container">
+          <div>
+            <div style="display:inline-block;min-width:100px;">
+              <p>รหัส</p>
+            </div>
+            <div style="display:inline-block;min-width:100px">
+              <p><%= data.orderid %></p>
+            </div>
+            <div style="display:inline-block;min-width:100px;margin-left: 20px;">
+              <p>วันที่รับ</p>
+            </div>
+            <div style="display:inline-block;min-width:100px;">
+              <p><%= data.date_receive %></p>
+            </div>
+            <div style="display:inline-block;min-width:100px;margin-left: 20px;">
+              <p>กำหนดคืน</p>
+            </div>
+            <div style="display:inline-block;min-width:100px;">
+              <p><%= data.date_return %></p>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline-block;min-width:100px;">
+              <p>การชำระเงิน</p>
+            </div>
+            <div style="display:inline-block;min-width:100px">
+              <p><%= data.payment_type %></p>
+            </div>
+            <div style="display:inline-block;min-width:100px;margin-left: 20px;">
+              <p>ค่าเช่า</p>
+            </div>
+            <div style="display:inline-block ;min-width:100px;">
+              <p><%= data.totalrental %> บาท</p>
+            </div>
+            <div style="display:inline-block;min-width:100px;margin-left: 20px;">
+              <p>จำนวนเล่ม</p>
+            </div>
+            <div style="display:inline-block;min-width:100px;">
+              <p><%= data.totalquantity %> เล่ม</p>
+            </div>
+          </div>
+          <div>
+            <div style="display:inline-block;min-width:100px;">
+              <p>สถานะ</p>
+            </div>
+            <div style="display:inline-block;min-width:100px">
+              <p><%= data.status %></p>
+            </div>
+          </div>
+          <% if(data.payment_type == 'โอนเงิน'){%>
+            <div>
+              <div style="display:inline-block;min-width:100px;">
+                <p>ธนาคาร</p>
+              </div>
+              <div style="display:inline-block;min-width:100px">
+                <p><%= payment.bank %></p>
+              </div>
+            </div>
+            <div>
+              <div style="display:inline-block;min-width:100px;">
+                <p>ชื่อบัญชี</p>
+              </div>
+              <div style="display:inline-block;min-width:100px">
+                <p><%= payment.bankaccountname %></p>
+              </div>
+            </div>
+            <div>
+              <div style="display:inline-block;min-width:100px;">
+                <p>เลขที่บัญชี</p>
+              </div>
+              <div style="display:inline-block;min-width:100px">
+                <p><%= payment.bankaccountnumber %></p>
+              </div>
+            </div>
+            <div>
+              <div style="display:inline-block;min-width:100px;">
+                <p>วันที่โอนเงิน</p>
+              </div>
+              <div style="display:inline-block;min-width:100px">
+                <p><%= payment.datepaid %></p>
+              </div>
+            </div>
+            <div>
+              <div style="display:inline-block;min-width:100px;">
+                <p>เวลาที่โอนเงิน</p>
+              </div>
+              <div style="display:inline-block;min-width:100px">
+                <p><%= payment.timepaid %></p>
+              </div>
+            </div>
+            <div>
+              <div style="display:inline-block;min-width:100px;">
+                <p>จำนวนเงินที่โอน</p>
+              </div>
+              <div style="display:inline-block;min-width:100px">
+                <p><%= payment.totalpaid %></p>
+              </div>
+            </div>
+          <% }%>
+        </div>
+
+        <footer class="w3-container w3-light-grey">
+          <h5>รายการเช่าหนังสือ</h5>
+          <input type="text" id="myInput" onkeyup="myFunction()" placeholder="ค้าหา...">
+        </footer>
+
+      </div>
+      <table class="w3-table w3-border w3-card-4 ">
+        <thead>
+          <tr class="w3-border">
+            <th style="text-align: center;" class="smallCell">ลำดับ</th>
+            <th style="text-align: center;">รายการ</th>
+            <th class="smallCell">ราคาปก</th>
+            <th class="smallCell">ราคาเช่า (20%)</th>
+            <th class="smallCell">จำนวน</th>
+          </tr>
+        </thead>
+        <tbody id="myTable">
+
+          <% 
+        var totalprice = 0;
+        var totalrental = 0;
+        var totalquantity = 0;
+        for(var i=0; i<data.items.length; i++) {%>
+          <tr>
+            <td class="w3-center"><%= i+1 %></td>
+            <td style="padding-left: 20px;"><%= data.items[i].name %></td>
+            <td class="w3-right-align"><%= parseFloat(data.items[i].pricebook).toFixed(2) %></td>
+            <td class="w3-right-align"><%= parseFloat((data.items[i].pricebook) * 0.2 ).toFixed(2) %></td>
+            <td class="w3-right-align">1</td>
+          </tr>
+          <% 
+        totalprice = parseFloat((data.items[i].pricebook))+parseFloat(totalprice) ;
+        totalrental = parseFloat((data.items[i].pricebook)* 0.2)+parseFloat(totalrental);
+        totalquantity = parseInt(1)+parseInt(totalquantity);
+          %>
+          <%
+        } 
+        %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="2" class="w3-right-align">รวม</td>
+            <td class="w3-right-align">
+              <%= (parseFloat(totalprice).toFixed(2) == 'NaN'?'':parseFloat(totalprice).toFixed(2)) %>
+            </td>
+            <td class=" w3-right-align">
+              <%= (parseFloat(totalrental).toFixed(2) == 'NaN'?'':parseFloat(totalrental).toFixed(2) ) %></td>
+            <td class="w3-right-align"><%=  totalquantity %></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <%- include('footer') -%>
+
+  <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+  <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+    integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

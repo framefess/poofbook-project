@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>หนัง-ลือ-สู !!!</title>
+  <link rel="stylesheet" href="/stylesheets/style.css" />
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+</head>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+  }
+
+  th {
+    white-space: nowrap;
+  }
+
+  tbody td {
+    height: 51px;
+  }
+
+  .smallCell {
+    width: 1px;
+    white-space: nowrap;
+  }
+</style>
+
+<body>
+  <% if(ordercheck != null){%>
+  <script>
+    alert("ไม่สามารถทำรายการได้กรุณาจัดการกับรายการล่าสุดก่อน");
+    location.href='/users/orderlist';
+  </script>
+  <% } %>
+  <%- include('header') -%>
+  <div class="center" style="padding: 10px 0px;">
+    <div class="con900" style="text-align: left;">
+      <form action="/users/order" method="post">
+        <div class="w3-card-4">
+
+          <header class="w3-container w3-light-grey">
+            <h1>เช่าหนังสือ</h1>
+          </header>
+
+          <div class="w3-container">
+            <label class="w3-text-green"><b>เลขที่</b></label>
+            <input class="w3-input w3-border w3-light-grey" type="text" name="orderid" value="<%= data.orderid%>" required
+              readonly="readonly" />
+            <label class="w3-text-green"><b>ช่องทางการชำระเงิน</b></label>
+            <select name="payment_type" class="w3-input w3-border" required="required">
+              <option value="" disabled selected>โปรดเลือก</option>
+              <option value="เงินสด">เงินสด</option>
+              <option value="โอนเงิน">โอนเงินผ่านธนาคาร</option>
+            </select>
+            <label class="w3-text-green"><b>วันที่รับ</b></label>
+            <input class="w3-input w3-border" type="date" name="date_receive" id="date_receive"
+              value="<%= moment().format('YYYY-MM-DD')%>" required />
+            <label class="w3-text-green"><b>กำหนดคืน</b></label>
+            <input class="w3-input w3-border" type="date" name="date_return" id="date_return" value="" required
+              readonly="readonly" />
+            <label class="w3-text-red"><b>** หนังสือ 1-2 เล่มอ่านได้ 5 วัน/ตั้งแต่ 3 เล่มขึ้นไปอ่านได้ 7 วัน</b></label>
+          </div>
+
+          <footer class="w3-container w3-light-grey">
+            <h5>รายการเช่าหนังสือ</h5>
+
+          </footer>
+
+        </div>
+        <table class="w3-table w3-border w3-card-4 ">
+          <thead>
+            <tr class="w3-border">
+              <th style="text-align: center;" class="smallCell">ลำดับ</th>
+              <th style="text-align: center;">รายการ</th>
+              <th style="text-align: center;width: 5%;">รูป</th>
+              <th class="smallCell">ราคาปก</th>
+              <th class="smallCell">ราคาเช่า (20%)</th>
+              <th class="smallCell">จำนวน</th>
+            </tr>
+          </thead>
+          <tbody id="myTable">
+            <% if(data.length == 0){%>
+            <tr>
+              <td colspan="7" class="w3-center">ไม่มีข้อมูลในตะกร้า</td>
+            </tr>
+            <%}else{%>
+            <% 
+          var totalprice = 0;
+          var totalrental = 0;
+          var totalquantity = 0;
+          for(var i=0; i<data.length; i++) {%>
+            <tr>
+              <td class="w3-center"><%= i+1 %></td>
+              <td style="padding-left: 20px;"><%= data[i].name %></td>
+              <td><img src="/images/<%= data[i].imgname %>" alt="" style="max-height:100%; max-width:100%"></td>
+              <td class="w3-right-align"><%= parseFloat(data[i].price).toFixed(2) %></td>
+              <td class="w3-right-align"><%= parseFloat((data[i].price) * 0.2 ).toFixed(2) %></td>
+              <td class="w3-right-align">1</td>
+            </tr>
+            <% 
+          totalprice = parseFloat((data[i].price))+parseFloat(totalprice) ;
+          totalrental = parseFloat((data[i].price)* 0.2)+parseFloat(totalrental);
+          totalquantity = parseInt(1)+parseInt(totalquantity);
+            %>
+            <input name="bookid" value="<%= data[i]._id%>" hidden>
+            <input name="name" value="<%= data[i].name%>" hidden>
+            <input name="pricebook" value="<%= data[i].price%>" hidden>
+            <input name="priceservice" value="<%= parseFloat((data[i].price)* 0.2) %>" hidden>
+            <%
+          } 
+          %>
+          <input name="totalprice" value="<%= totalprice %>" hidden>
+          <input name="totalrental" value="<%= totalrental %>" hidden>
+          <input name="totalquantity" value="<%= totalquantity %>" hidden>
+            <%}%>
+          
+
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="w3-right-align">รวม</td>
+            <td class="w3-right-align"><%= (parseFloat(totalprice).toFixed(2) == 'NaN'?'':parseFloat(totalprice).toFixed(2)) %>
+            </td>
+            <td class=" w3-right-align">
+              <%= (parseFloat(totalrental).toFixed(2) == 'NaN'?'':parseFloat(totalrental).toFixed(2) ) %></td>
+            <td class="w3-right-align"><%=  totalquantity %></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div style="float: right; margin: 10px;">
+          <input name="userid" value="<%= data.userid %>" hidden>
+          <button class="w3-btn w3-green" type="submit">ยืนยัน</button>
+          <button class="w3-btn w3-red" onclick="location.href='/'">ยกเลิก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <%- include('footer') -%>
+  <input id="day" value="<%= (data.length > 0 && data.length <= 2 ? 5 : 7) %>" hidden>
+  <!-- <p>ยินดีต้อนรับสู่ร้าน หนัง-สือ-สู !!!</p> -->
+  <script src="https://code.jquery.com/jquery-3.5.0.slim.min.js"
+    integrity="sha256-MlusDLJIP1GRgLrOflUQtshyP0TwT/RHXsI1wWGnQhs=" crossorigin="anonymous"></script>
+  <script src="/javascripts/moment.js"></script>
+  <script>
+    const day = $('#day').val();
+    document.getElementById('date_receive').min = moment().format("YYYY-MM-DD");
+    document.getElementById('date_receive').value = moment().format("YYYY-MM-DD");
+    document.getElementById('date_return').value = moment().add('days', day).format("YYYY-MM-DD");
+
+    $("#date_receive").change(function () {
+      let date_receive = new Date($('#date_receive').val());
+      let date_return = new Date($('#date_return').val());
+      $('#date_return').val(moment(date_receive).add('days', day).format("YYYY-MM-DD"));
+      // document.getElementById('date_return').value = moment().add('days', day).format("DD/MM/YYYY");
+    });
+  </script>
+</body>
+
+</html>
