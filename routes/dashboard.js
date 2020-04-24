@@ -214,7 +214,7 @@ router.post('/book', (req, res, next) => {
 //ลบข้อมูลหนังสือ
 router.get('/book/delete/:id', (req, res) => {
   const { id } = req.params;
-
+  console.log(id);
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
     const dbo = db.db("poofbook");
@@ -242,7 +242,6 @@ router.get('/users', (req, res) => {
     });
   });
 });
-
 
 //ลบข้อมูลสมาชิก
 router.get('/users/delete/:id', (req, res) => {

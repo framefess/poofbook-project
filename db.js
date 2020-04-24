@@ -36,7 +36,6 @@ MongoClient.connect(url, function (err, db) {
         }
 
     });
-
 });
 
 MongoClient.connect(url, function (err, db) {

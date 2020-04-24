@@ -34,7 +34,7 @@ router.get('/cart/add/:id', function (req, res, next) {
 
 router.get('/cart', function (req, res, next) {
   const cart = req.session.cart;
- 
+
   let idquery = [];
   cart.forEach(k => {
     idquery.push(ObjectId(k.id));
@@ -204,9 +204,26 @@ router.get('/orderlist/detail/:id', (req, res) => {
     dbo.collection("orders").findOne({ orderid: id }, function (err, result) {
       if (err) throw err;
       console.log(result);
-      db.close();
+      
       const data = result;
-      res.render('user_order_detail', { data });
+      console.log(id);
+      dbo.collection("payments").findOne({ orderid: id.toString() }, (req, result2) => {
+        console.log(result2);
+        // console.log(payment);
+        let payment;
+        if (result2 == null) {
+          payment = [];
+        } else {
+          payment = result2;
+        }
+
+        res.render('user_order_detail', { data, payment });
+        db.close();
+      });
+   
+      // console.log(payment);
+      // let payment = [];
+      // res.render('user_order_detail', { data, payment });
     });
   });
 });

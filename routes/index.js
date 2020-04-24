@@ -27,6 +27,7 @@ router.get('/', function (req, res, next) {
 
 });
 
+//สมัคร
 router.get('/register', function (req, res, next) {
   console.log(req.query.register)
   if (req.query.register == undefined) {
@@ -38,6 +39,7 @@ router.get('/register', function (req, res, next) {
 
 router.post('/register/add', function (req, res, next) {
   const data = req.body;
+ console.log(data);
   data.user_stat = 'user';
   MongoClient.connect(url, function (err, db) {
     if (err) throw err;
@@ -59,7 +61,9 @@ router.post('/register/add', function (req, res, next) {
     });
   });
 });
+//สมัคร //
 
+//
 router.get('/login', function (req, res, next) {
   // console.log(req.query.login)
   if (req.query.login == undefined) {

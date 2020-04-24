@@ -35,7 +35,7 @@ tbody td{
               <th style="text-align: center;" class="smallCell">ลำดับ</th>
               <th style="text-align: center;">อีเมล</th>
               <th style="text-align: center;">โทรศัพท์</th>
-              <th class="smallCell">สถานะเช่า</th>
+              <!-- <th class="smallCell">สถานะเช่า</th> -->
               <th style="text-align: center;"class="smallCell">การจัดการ</td></th>
             </tr>
           </thead>
@@ -45,7 +45,7 @@ tbody td{
                 <td class="w3-center"><%= i+1 %></td>
                 <td ><%= data[i].email %></td>
                 <td class="w3-center"><%= data[i].tel_number %> </td>
-                <td class="w3-center"></td>
+                <!-- <td class="w3-center"></td> -->
                 <td nowrap>
                   <!-- <button class="w3-button w3-tiny">Tiny</button>  -->
                   <button class="w3-button w3-blue w3-small" onclick="location.href='/dashboard/users/detail/<%= data[i]._id %>'">รายละเอียด</button><button class="w3-button w3-red w3-small" onclick="location.href='/dashboard/users/delete/<%= data[i]._id %>'">ลบ</button>
